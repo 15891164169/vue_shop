@@ -10,5 +10,7 @@ export default {
 </script>
 
 <style scoped>
-
+  .home {
+    color: red;
+  }
 </style>
