@@ -1,16 +1,16 @@
 <template>
-  <div id="home">
-    home
+  <div id="profile">
+    profile
   </div>
 </template>
 <script>
 export default {
-  name: 'Home'
+  name: 'Profile'
 }
 </script>
 
 <style scoped>
-  #home {
-    color: red;
+  #profile {
+    color: blue;
   }
 </style>
