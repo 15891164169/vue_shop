@@ -14,8 +14,9 @@ export default {
 
 <style scoped>
   #tab-bar {
+    z-index: 9;
+    position: fixed;
     display: flex;
-    position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
