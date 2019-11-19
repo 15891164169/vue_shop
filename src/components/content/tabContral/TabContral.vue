@@ -39,8 +39,6 @@ export default {
     font-size: 14px;
     text-align: center;
     background-color: #fff;
-    position: sticky;
-    top: 40px;
   }
   .tabContral-item {
     flex: 1;
