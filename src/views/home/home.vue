@@ -9,10 +9,10 @@
       :pullUpLoad="true"
       @scroll="showBack"
       @pullingUp="homePullUp">
-      <HomeSwiper :banners="banners"/>
+      <HomeSwiper :banners="banners" @swiperLoad="swiperImageLoad"/>
       <HomeRecommend :recommends="recommends"/>
       <Feature/>
-      <TabContral :tabTitles="tabTitles" @tabBarClick="tabBarClick"/>
+      <TabContral :tabTitles="tabTitles" @tabBarClick="tabBarClick" ref="tabCop"/>
       <GoodsList :goodsList="goodsSort"/>
     </Scroll>
 
@@ -31,6 +31,7 @@ import Scroll from '@/components/common/scroll/Scroll'
 import BackTop from '@/components/content/backTop/BackTop'
 
 import { getHomeMultidata, getHomeGoods } from '@/network/home.js'
+import { debounce } from '@/common/utils.js'
 
 export default {
   name: 'Home',
@@ -40,12 +41,14 @@ export default {
       recommends: [],
       tabTitles: ['流行', '新款', '精选'],
       goods: {
-        'pop': { page: 0, list: [] },
-        'new': { page: 0, list: [] },
-        'sell': { page: 0, list: [] }
+        'pop': { page: 1, list: [] },
+        'new': { page: 1, list: [] },
+        'sell': { page: 1, list: [] }
       },
       currentSort: 'pop',
-      showBackTop: false
+      showBackTop: false,
+      tabOffsetTop: 0,
+      homePageY: 0
     }
   },
   created () {
@@ -55,24 +58,39 @@ export default {
     this.getHomeGoods('new')
     this.getHomeGoods('sell')
   },
+  mounted () {
+    const refreshDebs = debounce(this.homeRefresh, 100)
+    this.$bus.$on('imgLoad', () => {
+      refreshDebs()
+    })
+  },
   computed: {
     goodsSort () {
       return this.goods[this.currentSort].list
     }
   },
+  activated () {
+    this.$refs.scroll.scroll.scrollTo(0, this.homePageY, 0)
+    this.homeRefresh()
+  },
+  deactivated () {
+    this.homePageY = this.$refs.scroll.getScrollY()
+  },
   methods: {
     getHomeMultidata () {
       getHomeMultidata().then(res => {
-        this.banners = res.banner.list
-        this.recommends = res.recommend.list
+        this.banners = res.data.banner.list
+        this.recommends = res.data.recommend.list
       })
     },
     getHomeGoods (type) {
       const page = this.goods[type].page + 1
       getHomeGoods(type, page).then(res => {
-        this.goods[type].list.push(...res.list)
+        const goodsList = res.data.list
+        this.goods[type].list.push(...goodsList)
         this.goods[type].page += 1
-        this.$refs.scroll.pullFinish()
+
+        this.$refs.scroll.finishPullUp()
       })
     },
     tabBarClick (tabIdx) {
@@ -94,13 +112,14 @@ export default {
     showBack (position) {
       this.showBackTop = -position.y > 800
     },
-    homePullUp () {
-      console.log('上拉加载更多')
-      this.getHomeGoods(this.currentSort)
-      this.homeRefresh()
-    },
     homeRefresh () {
       this.$refs.scroll.refreshScroll()
+    },
+    homePullUp () {
+      this.getHomeGoods(this.currentSort)
+    },
+    swiperImageLoad () {
+      this.tabOffsetTop = this.$refs.tabCop.$el.offsetTop
     }
   },
   components: {
@@ -142,12 +161,13 @@ export default {
   }
 
   .nav-home {
+    color: #fff;
+    background-color: var(--color-tint);
+
     position: fixed;
     left: 0;
     right: 0;
     top: 0;
     z-index: 999;
-    color: #fff;
-    background-color: var(--color-tint);
   }
 </style>

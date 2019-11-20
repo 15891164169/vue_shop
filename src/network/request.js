@@ -16,9 +16,10 @@ export function request (config) {
 
   // 响应拦截器
   instance.interceptors.response.use(response => {
-    if (response.data.success === true) {
-      return response.data.data
-    }
+    // if (response.data.success === true) {
+    //   return response.data.data
+    // }
+    return response.data
   }, err => {
     console.log(err)
   })
