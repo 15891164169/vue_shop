@@ -10,6 +10,9 @@
       <DetailCommentInfo ref="comment" :commentInfo="commentInfo"/>
       <GoodsList ref="recommend" :goodsList="recommendInfo"/>
     </Scroll>
+    <DetailBottomBar @addToCart="addToCart"/>
+
+    <BackTop @click.native="backTop" v-show="showBackTop"/>
   </div>
 </template>
 
@@ -21,15 +24,19 @@ import DetailShopInfo from './childComps/DetailShopInfo'
 import DetailImagesInfo from './childComps/DetailImagesInfo'
 import DetailParamsInfo from './childComps/DetailParamsInfo'
 import DetailCommentInfo from './childComps/DetailCommentInfo'
+import DetailBottomBar from './childComps/DetailBottomBar'
 
 import Scroll from '@/components/common/scroll/Scroll'
 import GoodsList from '@/components/content/goods/GoodsList'
 
-import { itemListenerMixin } from '@/common/mixin.js'
+import { BACKTOP_DISTANCE } from '@/common/const.js'
+import { itemListenerMixin, backTopButtonMinin } from '@/common/mixin.js'
 import { debounce } from '@/common/utils.js'
 
 import { getDetail, Goods,
   getRecommend } from '@/network/detail.js'
+
+import { mapActions } from 'vuex'
 
 export default {
   name: 'Detail',
@@ -47,7 +54,7 @@ export default {
       getNavItemY: null
     }
   },
-  mixins: [itemListenerMixin],
+  mixins: [itemListenerMixin, backTopButtonMinin],
   created () {
     this.iid = this.$route.params.iid
     this.getDetail(this.iid)
@@ -66,6 +73,7 @@ export default {
     this.$bus.$off('imgLoad', this.itemListener)
   },
   methods: {
+    ...mapActions(['addToShopCart']),
     getDetail (iid) {
       getDetail(iid).then(res => {
         const resData = res.result
@@ -95,6 +103,7 @@ export default {
     detailImgLoad () {
       // this.$refs.scroll.refreshScroll()
       this.refreshDebs()
+
       this.getNavItemY()
     },
     navClick (idx) {
@@ -102,6 +111,20 @@ export default {
     },
     deatilScroll (position) {
       // const positionY = -position.y
+      this.showBackTop = -position.y > BACKTOP_DISTANCE
+    },
+    addToCart () {
+      const goods = {}
+      goods.iid = this.iid
+      goods.imgURL = this.topSwiper[0]
+      goods.title = this.goodsInfo.title
+      goods.desc = this.goodsInfo.desc
+      goods.newPrice = this.goodsInfo.realPrice
+
+      goods.checked = true
+      goods.count = 1
+      // console.log(goods)
+      this.addToShopCart(goods)
     }
   },
   components: {
@@ -112,6 +135,7 @@ export default {
     DetailImagesInfo,
     DetailParamsInfo,
     DetailCommentInfo,
+    DetailBottomBar,
     GoodsList,
     Scroll
   }

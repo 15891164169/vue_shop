@@ -20,6 +20,8 @@
   </div>
 </template>
 <script>
+import { BACKTOP_DISTANCE } from '@/common/const.js'
+
 import HomeSwiper from './childComps/HomeSwiper'
 import HomeRecommend from './childComps/HomeRecommend'
 import Feature from './childComps/Feature'
@@ -28,10 +30,10 @@ import NavBar from '@/components/common/navbar/NavBar'
 import TabContral from '@/components/content/tabContral/TabContral'
 import GoodsList from '@/components/content/goods/GoodsList'
 import Scroll from '@/components/common/scroll/Scroll'
-import BackTop from '@/components/content/backTop/BackTop'
+
+import { itemListenerMixin, backTopButtonMinin } from '@/common/mixin.js'
 
 import { getHomeMultidata, getHomeGoods } from '@/network/home.js'
-import { itemListenerMixin } from '@/common/mixin.js'
 
 export default {
   name: 'Home',
@@ -51,16 +53,13 @@ export default {
       homePageY: 0
     }
   },
-  mixins: [itemListenerMixin],
+  mixins: [itemListenerMixin, backTopButtonMinin],
   created () {
     this.getHomeMultidata()
 
     this.getHomeGoods('pop')
     this.getHomeGoods('new')
     this.getHomeGoods('sell')
-  },
-  mounted () {
-    // console.log('home')
   },
   activated () {
     this.$refs.scroll.scroll.scrollTo(0, this.homePageY, 0)
@@ -105,11 +104,8 @@ export default {
           break
       }
     },
-    backTop () {
-      this.$refs.scroll.scrollTop(0, 0)
-    },
     showBack (position) {
-      this.showBackTop = -position.y > 800
+      this.showBackTop = -position.y > BACKTOP_DISTANCE
     },
     homeRefresh () {
       this.$refs.scroll.refreshScroll()
@@ -128,8 +124,7 @@ export default {
     NavBar,
     TabContral,
     GoodsList,
-    Scroll,
-    BackTop
+    Scroll
   }
 }
 </script>

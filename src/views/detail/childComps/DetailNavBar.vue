@@ -38,9 +38,12 @@ export default {
 
 <style scoped>
   #detail-nav {
-    position: relative;
-    background-color: #fff;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
     z-index: 10;
+    background-color: #fff;
   }
   .backImg {}
   .backImg img {
