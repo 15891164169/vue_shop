@@ -27,6 +27,7 @@ export default {
     },
     navClick (idx) {
       this.currentIndex = idx
+      this.$emit('navClick', idx)
     }
   },
   components: {

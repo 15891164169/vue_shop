@@ -1,14 +1,14 @@
 <template>
   <div id="detail">
-    <DetailNavBar/>
+    <DetailNavBar @navClick="navClick"/>
     <Scroll class="content" ref="scroll">
       <DetailSwiper :topSwiper="topSwiper"/>
       <DetailBaseInfo :goodsInfo="goodsInfo"/>
       <DetailShopInfo :shopInfo="shopInfo"/>
-      <DetailImagesInfo :imagesInfo="imagesInfo"/>
-      <DetailParamsInfo :itemParams="itemParams"/>
-      <DetailCommentInfo :commentInfo="commentInfo"/>
-      <GoodsList :goodsList="recommendInfo"/>
+      <DetailImagesInfo :imagesInfo="imagesInfo" @detailImgLoad="detailImgLoad"/>
+      <DetailParamsInfo ref="params" :itemParams="itemParams"/>
+      <DetailCommentInfo ref="comment" :commentInfo="commentInfo"/>
+      <GoodsList ref="recommend" :goodsList="recommendInfo"/>
     </Scroll>
   </div>
 </template>
@@ -26,6 +26,7 @@ import Scroll from '@/components/common/scroll/Scroll'
 import GoodsList from '@/components/content/goods/GoodsList'
 
 import { itemListenerMixin } from '@/common/mixin.js'
+import { debounce } from '@/common/utils.js'
 
 import { getDetail, Goods,
   getRecommend } from '@/network/detail.js'
@@ -41,7 +42,9 @@ export default {
       imagesInfo: {},
       itemParams: {},
       commentInfo: {},
-      recommendInfo: {}
+      recommendInfo: {},
+      navItemY: [],
+      getNavItemY: null
     }
   },
   mixins: [itemListenerMixin],
@@ -49,9 +52,15 @@ export default {
     this.iid = this.$route.params.iid
     this.getDetail(this.iid)
     this.getRecommend()
-  },
-  mounted () {
-    console.log('detail')
+
+    this.getNavItemY = debounce(() => {
+      this.navItemY = []
+      this.navItemY.push(0)
+      this.navItemY.push(this.$refs.params.$el.offsetTop)
+      this.navItemY.push(this.$refs.comment.$el.offsetTop)
+      this.navItemY.push(this.$refs.recommend.$el.offsetTop)
+      console.log(this.navItemY)
+    }, 100)
   },
   destroyed () {
     this.$bus.$off('imgLoad', this.itemListener)
@@ -60,7 +69,7 @@ export default {
     getDetail (iid) {
       getDetail(iid).then(res => {
         const resData = res.result
-        console.log(resData)
+        // console.log(resData)
         // 顶部轮播
         this.topSwiper = resData.itemInfo.topImages
         // 商品信息
@@ -82,6 +91,14 @@ export default {
         let resData = res.data
         this.recommendInfo = resData.list
       })
+    },
+    detailImgLoad () {
+      // this.$refs.scroll.refreshScroll()
+      this.refreshDebs()
+      this.getNavItemY()
+    },
+    navClick (idx) {
+      this.$refs.scroll.scroll.scrollTo(0, -this.navItemY[idx], 300)
     }
   },
   components: {

@@ -1,6 +1,6 @@
 <template>
   <div v-if="Object.keys(shopInfo).length !== 0" class="shop-info">
-    <div class="shop-img" @click="test">
+    <div class="shop-img">
       <img :src="shopInfo.shopLogo">
       <span>{{ shopInfo.name }}</span>
     </div>
@@ -47,11 +47,6 @@ export default {
       } else {
         return value
       }
-    }
-  },
-  methods: {
-    test () {
-      console.log(this.shopInfo)
     }
   }
 }

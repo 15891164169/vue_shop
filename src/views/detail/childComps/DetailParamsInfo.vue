@@ -1,5 +1,5 @@
 <template>
-  <div v-if="Object.keys(itemParams).length !== 0" id="params-info" @click="test">
+  <div v-if="Object.keys(itemParams).length !== 0" id="params-info">
     <div class="params-rule" v-for="(table, idx) in itemParams.rule.tables" :key="idx">
       <p v-for="(items, idy) in table" :key="idy" class="rule-row">
         <span v-for="(item, idz) in items" :key="idz">{{ item }}</span>
@@ -24,11 +24,6 @@ export default {
       default () {
         return {}
       }
-    }
-  },
-  methods: {
-    test () {
-      console.log(this.itemParams)
     }
   }
 }

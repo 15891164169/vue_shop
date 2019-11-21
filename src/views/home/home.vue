@@ -60,7 +60,7 @@ export default {
     this.getHomeGoods('sell')
   },
   mounted () {
-    console.log('home')
+    // console.log('home')
   },
   activated () {
     this.$refs.scroll.scroll.scrollTo(0, this.homePageY, 0)

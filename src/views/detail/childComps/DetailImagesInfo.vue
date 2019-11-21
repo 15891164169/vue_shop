@@ -1,6 +1,6 @@
 <template>
   <div v-if="Object.keys(imagesInfo).length !== 0" id="images-info">
-    <div class="images-text" @click="test">
+    <div class="images-text">
       <div class="float-div start"></div>
       <p>{{ imagesInfo.desc }}</p>
       <div class="float-div end"></div>
@@ -8,7 +8,7 @@
     <div class="images-item" v-for="(item, idx) in imagesInfo.detailImage" :key="idx">
       <p class="images-title">{{ item.key }}</p>
       <div class="images-img" v-for="(item, idx) in item.list" :key="idx">
-        <img :src="item">
+        <img :src="item" @load="detailImgLoad">
       </div>
     </div>
   </div>
@@ -26,8 +26,8 @@ export default {
     }
   },
   methods: {
-    test () {
-      console.log(this.imagesInfo)
+    detailImgLoad () {
+      this.$emit('detailImgLoad')
     }
   }
 }

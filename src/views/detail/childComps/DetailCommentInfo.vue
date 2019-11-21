@@ -39,9 +39,6 @@ export default {
       }
     }
   },
-  mounted () {
-    console.log(this.commentInfo)
-  },
   filters: {
     showDate (value) {
       const date = new Date(value * 1000)

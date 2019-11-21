@@ -3,15 +3,15 @@ import { debounce } from '@/common/utils.js'
 export const itemListenerMixin = {
   data () {
     return {
-      itemListener: null
+      itemListener: null,
+      refreshDebs: null
     }
   },
   mounted () {
-    const refreshDebs = debounce(this.$refs.scroll.refreshScroll, 100)
+    this.refreshDebs = debounce(this.$refs.scroll.refreshScroll, 100)
     this.itemListener = () => {
-      refreshDebs()
+      this.refreshDebs()
     }
     this.$bus.$on('imgLoad', this.itemListener)
-    console.log('混入')
   }
 }

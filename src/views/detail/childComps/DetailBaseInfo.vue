@@ -1,6 +1,6 @@
 <template>
   <div v-if="Object.keys(goodsInfo).length !== 0" class="base-info">
-    <div class="info-title" @click="test">{{ goodsInfo.title }}</div>
+    <div class="info-title">{{ goodsInfo.title }}</div>
     <div class="info-price">
       <span class="n-price">{{ goodsInfo.newPrice }}</span>
       <span class="o-price">{{ goodsInfo.oldPrice }}</span>
@@ -29,11 +29,6 @@ export default {
       default () {
         return {}
       }
-    }
-  },
-  methods: {
-    test () {
-      console.log(this.goodsInfo)
     }
   }
 }
