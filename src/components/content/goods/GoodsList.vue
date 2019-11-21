@@ -8,14 +8,7 @@
 import GoodsListItem from './GoodsListItem'
 export default {
   name: 'GoodsList',
-  props: {
-    goodsList: {
-      type: Array,
-      default () {
-        return []
-      }
-    }
-  },
+  props: ['goodsList'],
   components: {
     GoodsListItem
   }

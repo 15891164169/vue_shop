@@ -31,7 +31,7 @@ import Scroll from '@/components/common/scroll/Scroll'
 import BackTop from '@/components/content/backTop/BackTop'
 
 import { getHomeMultidata, getHomeGoods } from '@/network/home.js'
-import { debounce } from '@/common/utils.js'
+import { itemListenerMixin } from '@/common/mixin.js'
 
 export default {
   name: 'Home',
@@ -51,6 +51,7 @@ export default {
       homePageY: 0
     }
   },
+  mixins: [itemListenerMixin],
   created () {
     this.getHomeMultidata()
 
@@ -59,15 +60,7 @@ export default {
     this.getHomeGoods('sell')
   },
   mounted () {
-    const refreshDebs = debounce(this.homeRefresh, 100)
-    this.$bus.$on('imgLoad', () => {
-      refreshDebs()
-    })
-  },
-  computed: {
-    goodsSort () {
-      return this.goods[this.currentSort].list
-    }
+    console.log('home')
   },
   activated () {
     this.$refs.scroll.scroll.scrollTo(0, this.homePageY, 0)
@@ -75,6 +68,12 @@ export default {
   },
   deactivated () {
     this.homePageY = this.$refs.scroll.getScrollY()
+    this.$bus.$off('imgLoad', this.itemListener)
+  },
+  computed: {
+    goodsSort () {
+      return this.goods[this.currentSort].list
+    }
   },
   methods: {
     getHomeMultidata () {
