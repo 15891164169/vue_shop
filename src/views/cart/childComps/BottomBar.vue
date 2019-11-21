@@ -20,7 +20,6 @@ export default {
   methods: {
     ...mapActions(['totalCheckedType']),
     allChecked () {
-      // console.log(1)
       this.totalCheckedType()
     }
   },
