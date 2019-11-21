@@ -31,22 +31,29 @@ export default {
       probeType: this.probeType,
       pullUpLoad: this.pullUpLoad
     })
-    this.scroll.on('scroll', (position) => {
-      this.$emit('scroll', position)
-    })
-    this.scroll.on('pullingUp', () => {
-      this.$emit('pullingUp')
-    })
+    if (this.probeType === 2 || this.probeType === 3) {
+      this.scroll.on('scroll', (position) => {
+        this.$emit('scroll', position)
+      })
+    }
+    if (this.pullUpLoad) {
+      this.scroll.on('pullingUp', () => {
+        this.$emit('pullingUp')
+      })
+    }
   },
   methods: {
     scrollTop (x, y, time = 500) {
-      this.scroll.scrollTo(x, y, time)
-    },
-    pullFinish () {
-      this.scroll.finishPullUp()
+      this.scroll && this.scroll.refresh && this.scroll.scrollTo(x, y, time)
     },
     refreshScroll () {
-      this.scroll.refresh()
+      this.scroll && this.scroll.refresh && this.scroll.refresh()
+    },
+    finishPullUp () {
+      this.scroll && this.scroll.refresh && this.scroll.finishPullUp()
+    },
+    getScrollY () {
+      return this.scroll ? this.scroll.y : 0
     }
   }
 }

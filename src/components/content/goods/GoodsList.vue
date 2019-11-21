@@ -8,14 +8,7 @@
 import GoodsListItem from './GoodsListItem'
 export default {
   name: 'GoodsList',
-  props: {
-    goodsList: {
-      type: Array,
-      default () {
-        return []
-      }
-    }
-  },
+  props: ['goodsList'],
   components: {
     GoodsListItem
   }
@@ -24,7 +17,7 @@ export default {
 
 <style scoped>
   .goods-list {
-    -padding: 5px;
+    padding-top: 5px;
     margin-bottom: 49px;
     display: flex;
     flex-wrap: wrap;
@@ -32,5 +25,9 @@ export default {
   }
   .goods-list .list-comp {
     width: 30%;
+  }
+  .fixed-top {
+    position: fixed;
+    top: 621px;
   }
 </style>
