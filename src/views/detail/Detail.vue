@@ -1,7 +1,7 @@
 <template>
   <div id="detail">
     <DetailNavBar @navClick="navClick"/>
-    <Scroll class="content" ref="scroll">
+    <Scroll class="content" ref="scroll" :probeType="3" @scroll="deatilScroll">
       <DetailSwiper :topSwiper="topSwiper"/>
       <DetailBaseInfo :goodsInfo="goodsInfo"/>
       <DetailShopInfo :shopInfo="shopInfo"/>
@@ -59,7 +59,7 @@ export default {
       this.navItemY.push(this.$refs.params.$el.offsetTop)
       this.navItemY.push(this.$refs.comment.$el.offsetTop)
       this.navItemY.push(this.$refs.recommend.$el.offsetTop)
-      console.log(this.navItemY)
+      // console.log(this.navItemY)
     }, 100)
   },
   destroyed () {
@@ -99,6 +99,9 @@ export default {
     },
     navClick (idx) {
       this.$refs.scroll.scroll.scrollTo(0, -this.navItemY[idx], 300)
+    },
+    deatilScroll (position) {
+      // const positionY = -position.y
     }
   },
   components: {
