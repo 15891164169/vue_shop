@@ -43,7 +43,7 @@ export default {
   .cart-list {
     position: absolute;
     top: 44px;
-    bottom: 49px;
+    bottom: 93px;
     width: 100%;
   }
 </style>

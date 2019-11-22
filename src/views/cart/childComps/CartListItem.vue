@@ -35,10 +35,14 @@ export default {
   methods: {
     ...mapActions(['goodsCheckedType', 'deleteShopCartGoods']),
     changeChecked () {
-      this.goodsCheckedType(this.itemInfo)
+      this.goodsCheckedType(this.itemInfo).then((res) => {
+        this.$toast.showToast(res, 2000)
+      })
     },
     deleteGoods () {
-      this.deleteShopCartGoods(this.itemInfo)
+      this.deleteShopCartGoods(this.itemInfo).then((res) => {
+        this.$toast.showToast(res, 1500)
+      })
     }
   },
   components: {
@@ -57,7 +61,7 @@ export default {
   }
 
   .item-selector {
-    width: 14%;
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -70,6 +74,7 @@ export default {
   }
 
   .item-img {
+    flex: 2;
     padding: 5px;
     /*border: 1px solid #ccc;*/
   }
@@ -82,6 +87,7 @@ export default {
   }
 
   .item-info {
+    flex: 8;
     font-size: 17px;
     color: #333;
     padding: 5px 10px;

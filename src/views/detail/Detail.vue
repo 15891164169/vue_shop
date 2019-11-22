@@ -66,7 +66,6 @@ export default {
       this.navItemY.push(this.$refs.params.$el.offsetTop)
       this.navItemY.push(this.$refs.comment.$el.offsetTop)
       this.navItemY.push(this.$refs.recommend.$el.offsetTop)
-      // console.log(this.navItemY)
     }, 100)
   },
   destroyed () {
@@ -123,8 +122,9 @@ export default {
 
       goods.checked = true
       goods.count = 1
-      // console.log(goods)
-      this.addToShopCart(goods)
+      this.addToShopCart(goods).then((res) => {
+        this.$toast.showToast(res, 1000)
+      })
     }
   },
   components: {
@@ -150,6 +150,7 @@ export default {
     background-color: #fff;
   }
   .content {
-    height: calc(100% - 44px);
+    margin-top: 44px;
+    height: calc(100% - 102px);
   }
 </style>
