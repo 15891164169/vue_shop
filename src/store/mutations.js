@@ -1,4 +1,5 @@
 import {
+  CREATE_GOODS_ITEM,
   ADD_TO_SHOP_CART,
   GOODS_CHECKED_TYPE,
   TOTAL_CHECKED_TYPE,
@@ -6,13 +7,14 @@ import {
 } from './mutation-types.js'
 
 export const mutations = {
+  [CREATE_GOODS_ITEM] (state, object) {
+    state.cart.push(object)
+    localStorage.setItem('gou_wu_jie', JSON.stringify(state.cart))
+  },
+
   [ADD_TO_SHOP_CART] (state, object) {
     const goodsItem = state.cart.find(item => { return item.iid === object.iid })
-    if (goodsItem) {
-      goodsItem.count += object.count
-    } else {
-      state.cart.push(object)
-    }
+    goodsItem.count += object.count
     localStorage.setItem('gou_wu_jie', JSON.stringify(state.cart))
   },
 
@@ -22,7 +24,6 @@ export const mutations = {
   },
 
   [TOTAL_CHECKED_TYPE] (state, object) {
-    console.log(state.cart.filter(item => !item.checked).length)
     if (state.cart.filter(item => !item.checked).length) {
       state.cart.forEach(item => {
         item.checked = true
@@ -37,7 +38,6 @@ export const mutations = {
 
   [DELETE_SHOP_CART_GOODS] (state, object) {
     const goodsIndex = state.cart.findIndex(item => { return item.iid === object.iid })
-    console.log(goodsIndex)
     state.cart.splice(goodsIndex, 1)
     localStorage.setItem('gou_wu_jie', JSON.stringify(state.cart))
   }

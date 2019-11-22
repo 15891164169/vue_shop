@@ -1,3 +1,6 @@
+// 创建一个商品
+export const CREATE_GOODS_ITEM = 'CREATE_GOODS_ITEM'
+
 // 加入到购物车
 export const ADD_TO_SHOP_CART = 'ADD_TO_SHOP_CART'
 
